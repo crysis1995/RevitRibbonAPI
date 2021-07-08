@@ -44,10 +44,7 @@ namespace RevitRibbon.API
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGraphQL();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapGraphQL());
 
             app.UseGraphQLVoyager();
         }

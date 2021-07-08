@@ -2,5 +2,7 @@
 
 namespace RevitRibbon.Types.Payloads
 {
-    public record AddScriptPayload(Script Script);
+    public record ParameterPayload(Parameter Parameter)
+    {
+    }
 }

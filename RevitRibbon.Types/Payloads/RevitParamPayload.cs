@@ -2,7 +2,5 @@
 
 namespace RevitRibbon.Types.Payloads
 {
-    public record AddGroupPayload(Group Group)
-    {
-    }
+    public record RevitParamPayload(RevitParam RevitParam);
 }
