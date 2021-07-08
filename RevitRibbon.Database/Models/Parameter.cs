@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RevitRibbon.Database.Models
 {
-    public class Parameter : AuditableEntity
+    public class Parameter : AuditableEntity, IEntity
     {
         [Key]
         [MaxLength(5)]

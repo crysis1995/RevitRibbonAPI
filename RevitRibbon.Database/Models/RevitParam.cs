@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using RevitRibbon.Database.Common;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RevitRibbon.Database.Models
 {
-    public class RevitParam
+    public class RevitParam : IEntity
     {
         [Key]
         public int Id { get; set; }

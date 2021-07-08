@@ -7,7 +7,7 @@ namespace RevitRibbon.Database.Models
     /// <summary>
     /// Table of Revit elements group with type of element if needed
     /// </summary>
-    public class Group : AuditableEntity
+    public class Group : AuditableEntity, IEntity
     {
         [Key]
         public int Id { get; set; }

@@ -7,7 +7,7 @@ namespace RevitRibbon.Database.Models
     /// <summary>
     /// Table of scripts in RevitRibbon
     /// </summary>
-    public class Script : AuditableEntity
+    public class Script : AuditableEntity, IEntity
     {
         [Key]
         public int Id { get; set; }

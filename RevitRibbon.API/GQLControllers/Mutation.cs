@@ -1,13 +1,17 @@
 ﻿using HotChocolate;
 using HotChocolate.Data;
+using RevitRibbon.Database.Common;
 using RevitRibbon.Database.Models;
 using RevitRibbon.Infrastructure.Data;
 using RevitRibbon.Types.Inputs;
 using RevitRibbon.Types.Payloads;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RevitRibbon.API.GQLControllers
 {
+    // TODO Add OneOf instead of throwing error
     public class Mutation
     {
         [UseDbContext(typeof(RevitRibbonContext))]
@@ -23,73 +27,6 @@ namespace RevitRibbon.API.GQLControllers
             context.Groups.Add(group);
             await context.SaveChangesAsync().ConfigureAwait(false);
             return new GroupPayload(group);
-        }
-
-        [UseDbContext(typeof(RevitRibbonContext))]
-        public async Task<bool> DeleteGroupAsync(int Id, [ScopedService] RevitRibbonContext context)
-        {
-            context.Groups.Remove(context.Groups.Find(Id));
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return true;
-        }
-
-        [UseDbContext(typeof(RevitRibbonContext))]
-        public async Task<GroupPayload> UpdateGroupAsync(UpdateGroupInput input, [ScopedService] RevitRibbonContext context)
-        {
-            Group _group = context.Groups.Find(input.Id);
-            var group = new Group
-            {
-                Id = input.Id,
-                Name = input.Name ?? _group.Name,
-                IsNullable = input.IsNullable ?? _group.IsNullable,
-                Type = input.Type ?? _group.Type
-            };
-
-            context.Groups.Update(group);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return new GroupPayload(group);
-        }
-
-        [UseDbContext(typeof(RevitRibbonContext))]
-        public async Task<RevitParamPayload> AddRevitParamAsync(AddRevitParamInput input, [ScopedService] RevitRibbonContext context)
-        {
-            var revitParam = new RevitParam
-            {
-                Name = input.Name,
-                ScriptId = input.ScriptId,
-                ParamType = input.ParamType,
-                Description = input.Description
-            };
-
-            context.RevitParams.Add(revitParam);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return new RevitParamPayload(revitParam);
-        }
-
-        [UseDbContext(typeof(RevitRibbonContext))]
-        public async Task<bool> DeleteRevitParamAsync(int Id, [ScopedService] RevitRibbonContext context)
-        {
-            context.RevitParams.Remove(context.RevitParams.Find(Id));
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return true;
-        }
-
-        [UseDbContext(typeof(RevitRibbonContext))]
-        public async Task<RevitParamPayload> UpdateRevitParamAsync(UpdateRevitParamInput input, [ScopedService] RevitRibbonContext context)
-        {
-            RevitParam _revitParam = context.RevitParams.Find(input.Id);
-            var revitParam = new RevitParam
-            {
-                Id = input.Id,
-                Name = input.Name ?? _revitParam.Name,
-                Description = input.Description ?? _revitParam.Description,
-                ParamType = input.ParamType ?? _revitParam.ParamType,
-                ScriptId = input.ScriptId ?? _revitParam.ScriptId
-            };
-
-            context.RevitParams.Update(revitParam);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return new RevitParamPayload(revitParam);
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
@@ -110,29 +47,19 @@ namespace RevitRibbon.API.GQLControllers
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
-        public async Task<bool> DeleteParameterAsync(string Code, [ScopedService] RevitRibbonContext context)
+        public async Task<RevitParamPayload> AddRevitParamAsync(AddRevitParamInput input, [ScopedService] RevitRibbonContext context)
         {
-            context.Parameters.Remove(context.Parameters.Find(Code));
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return true;
-        }
-
-        [UseDbContext(typeof(RevitRibbonContext))]
-        public async Task<ParameterPayload> UpdateParameterAsync(UpdateParameterInput input, [ScopedService] RevitRibbonContext context)
-        {
-            Parameter _parameter = context.Parameters.Find(input.Code);
-            var parameter = new Parameter
+            var revitParam = new RevitParam
             {
-                Code = input.Code,
-                Pl = input.Pl ?? _parameter.Pl,
-                En = input.En ?? _parameter.En,
-                GroupId = input.GroupId ?? _parameter.GroupId,
-                RevitParamId = input.RevitParamId ?? _parameter.RevitParamId,
+                Name = input.Name,
+                ScriptId = input.ScriptId,
+                ParamType = input.ParamType,
+                Description = input.Description
             };
 
-            context.Parameters.Update(parameter);
+            context.RevitParams.Add(revitParam);
             await context.SaveChangesAsync().ConfigureAwait(false);
-            return new ParameterPayload(parameter);
+            return new RevitParamPayload(revitParam);
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
@@ -150,27 +77,123 @@ namespace RevitRibbon.API.GQLControllers
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
-        public async Task<bool> DeleteScriptAsync(int Id, [ScopedService] RevitRibbonContext context)
+        public async Task<bool> DeleteGroupAsync(int id, [ScopedService] RevitRibbonContext context)
         {
-            context.Scripts.Remove(context.Scripts.Find(Id));
+            Group _group = context.Groups.SingleOrDefault(x => x.Id == id);
+
+            if (_group is not null)
+            {
+                context.Groups.Remove(_group);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return true;
+            }
+            return false;
+        }
+
+        [UseDbContext(typeof(RevitRibbonContext))]
+        public async Task<bool> DeleteParameterAsync(string code, [ScopedService] RevitRibbonContext context)
+        {
+            Parameter _parameter = context.Parameters.SingleOrDefault(x => x.Code == code);
+            if (_parameter is not null)
+            {
+                context.Parameters.Remove(_parameter);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return true;
+            }
+            return false;
+        }
+
+        [UseDbContext(typeof(RevitRibbonContext))]
+        public async Task<bool> DeleteRevitParamAsync(int id, [ScopedService] RevitRibbonContext context)
+        {
+            RevitParam _revitParams = context.RevitParams.SingleOrDefault(x => x.Id == id);
+            if (_revitParams is not null)
+            {
+                context.RevitParams.Remove(_revitParams);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return true;
+            }
+            return false;
+        }
+
+        [UseDbContext(typeof(RevitRibbonContext))]
+        public async Task<bool> DeleteScriptAsync(int id, [ScopedService] RevitRibbonContext context)
+        {
+            Script _script = context.Scripts.SingleOrDefault(x => x.Id == id);
+            if (_script is not null)
+            {
+                context.Scripts.Remove(_script);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return true;
+            }
+            return false;
+        }
+
+        [UseDbContext(typeof(RevitRibbonContext))]
+        public async Task<GroupPayload> UpdateGroupAsync(UpdateGroupInput input, [ScopedService] RevitRibbonContext context)
+        {
+            Group _group = context.Groups.SingleOrDefault(x => x.Id == input.Id);
+
+            if (_group is null)
+            {
+                throw new ArgumentException("There is no Group with given Id");
+            }
+            _group.UpdateEntity(input);
             await context.SaveChangesAsync().ConfigureAwait(false);
-            return true;
+            return new GroupPayload(_group);
+        }
+
+        [UseDbContext(typeof(RevitRibbonContext))]
+        public async Task<ParameterPayload> UpdateParameterAsync(UpdateParameterInput input, [ScopedService] RevitRibbonContext context)
+        {
+            Parameter _parameter = context.Parameters.SingleOrDefault(x => x.Code == input.Code);
+            if (_parameter is null)
+            {
+                throw new ArgumentException("There is no Parameter with given Code");
+            }
+
+            _parameter.UpdateEntity(input);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            return new ParameterPayload(_parameter);
+        }
+
+        [UseDbContext(typeof(RevitRibbonContext))]
+        public async Task<RevitParamPayload> UpdateRevitParamAsync(UpdateRevitParamInput input, [ScopedService] RevitRibbonContext context)
+        {
+            RevitParam _revitParam = context.RevitParams.SingleOrDefault(x => x.Id == input.Id);
+            if (_revitParam is null)
+            {
+                throw new ArgumentException("There is no RevitParam with given Id");
+            }
+
+            _revitParam.UpdateEntity(input);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            return new RevitParamPayload(_revitParam);
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
         public async Task<ScriptPayload> UpdateScriptAsync(UpdateScriptInput input, [ScopedService] RevitRibbonContext context)
         {
-            Script _script = context.Scripts.Find(input.Id);
-            var script = new Script
+            Script _script = context.Scripts.SingleOrDefault(x => x.Id == input.Id);
+            if (_script is null)
             {
-                Id = input.Id,
-                Name = input.Name ?? _script.Name,
-                Tooltip = input.Tooltip ?? _script.Tooltip
-            };
+                throw new ArgumentException("There is no Script with given Id");
+            }
 
-            context.Scripts.Update(script);
+            _script.UpdateEntity(input);
             await context.SaveChangesAsync().ConfigureAwait(false);
-            return new ScriptPayload(script);
+            return new ScriptPayload(_script);
+        }
+    }
+
+    internal static class MutationHelper
+    {
+        public static void UpdateEntity<TEntity, Tinput>(this TEntity entity, Tinput input) where TEntity : IEntity
+        {
+            foreach (var prop in input.GetType().GetProperties().Where(x => x.GetValue(input) is not null))
+            {
+                entity.GetType().GetProperty(prop.Name).SetValue(entity, prop.GetValue(input));
+            }
         }
     }
 }
