@@ -1,4 +1,5 @@
 ﻿using RevitRibbon.Database.Common;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace RevitRibbon.Database.Models
@@ -23,8 +24,8 @@ namespace RevitRibbon.Database.Models
         public Group Group { get; set; }
 
         [Required]
-        public int RevitParamId { get; set; }
+        public Guid SharedParameterId { get; set; }
 
-        public RevitParam RevitParam { get; set; }
+        public SharedParameter SharedParameter { get; set; }
     }
 }

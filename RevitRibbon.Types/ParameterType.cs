@@ -17,10 +17,10 @@ namespace RevitRibbon.Types
             descriptor.Field(x => x.LastModified).Ignore();
             descriptor.Field(x => x.LastModifiedBy).Ignore();
 
-            descriptor.Field(x => x.RevitParam)
-                .ResolveWith<Resolvers>(m => m.GetRevitParam(default!, default!))
+            descriptor.Field(x => x.SharedParameter)
+                .ResolveWith<Resolvers>(m => m.GetSharedParameter(default!, default!))
                 .UseDbContext<RevitRibbonContext>()
-                .Description("Get associated Revit parameter");
+                .Description("Get associated shared parameter");
 
             descriptor.Field(x => x.Group)
                 .ResolveWith<Resolvers>(m => m.GetGroup(default!, default!))
@@ -35,9 +35,9 @@ namespace RevitRibbon.Types
                 return context.Groups.FirstOrDefault(x => x.Id == parameter.GroupId);
             }
 
-            public RevitParam GetRevitParam(Parameter parameter, [ScopedService] RevitRibbonContext context)
+            public SharedParameter GetSharedParameter(Parameter parameter, [ScopedService] RevitRibbonContext context)
             {
-                return context.RevitParams.FirstOrDefault(x => x.Id == parameter.RevitParamId);
+                return context.SharedParameters.FirstOrDefault(x => x.Id == parameter.SharedParameterId);
             }
         }
     }

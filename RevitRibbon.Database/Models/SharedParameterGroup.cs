@@ -4,20 +4,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RevitRibbon.Database.Models
 {
-    /// <summary>
-    /// Table of scripts in RevitRibbon
-    /// </summary>
-    public class Script : AuditableEntity, IEntity
+    public class SharedParameterGroup : AuditableEntity, IEntity
     {
         [Key]
+        [Required]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Name { get; set; }
-
-        [MaxLength(250)]
-        public string Tooltip { get; set; }
 
         public ICollection<SharedParameter> SharedParameters { get; set; } = new List<SharedParameter>();
     }
