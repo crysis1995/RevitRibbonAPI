@@ -16,7 +16,8 @@ namespace RevitRibbon.Infrastructure.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public DbSet<Script> Scripts { get; set; }
-        public DbSet<RevitParam> RevitParams { get; set; }
+        public DbSet<SharedParameter> SharedParameters { get; set; }
+        public DbSet<SharedParameterGroup> SharedParameterGroups { get; set; }
 
         public async Task<int> SaveChangesAsync()
         {
@@ -33,8 +34,26 @@ namespace RevitRibbon.Infrastructure.Data
                     ((AuditableEntity)entityEntry.Entity).Created = DateTime.UtcNow;
                 }
             }
-
             return await base.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Group>()
+                .HasIndex(group => group.Name)
+                .IsUnique();
+
+            builder.Entity<Script>()
+                .HasIndex(script => script.Name)
+                .IsUnique();
+
+            builder.Entity<SharedParameter>()
+                .HasIndex(script => script.Name)
+                .IsUnique();
+
+            builder.Entity<SharedParameterGroup>()
+                .HasIndex(script => script.Name)
+                .IsUnique();
         }
     }
 }

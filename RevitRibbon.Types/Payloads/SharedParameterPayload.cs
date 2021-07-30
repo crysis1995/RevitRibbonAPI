@@ -2,5 +2,5 @@
 
 namespace RevitRibbon.Types.Payloads
 {
-    public record RevitParamPayload(RevitParam RevitParam);
+    public record SharedParameterPayload(SharedParameter SharedParameter);
 }

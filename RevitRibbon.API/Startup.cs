@@ -27,9 +27,10 @@ namespace RevitRibbon.API
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
                 .AddType<GroupType>()
-                .AddType<RevitParamType>()
+                .AddType<SharedParameterType>()
                 .AddType<ScriptType>()
                 .AddType<ParameterType>()
+                .AddType<SharedParameterGroupType>()
                 .AddFiltering()
                 .AddSorting();
         }
