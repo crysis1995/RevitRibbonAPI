@@ -14,7 +14,10 @@ namespace RevitRibbon.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseKestrel();
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:5003", "https://localhost:5004");
+                    webBuilder.UseIISIntegration();
                 });
     }
 }

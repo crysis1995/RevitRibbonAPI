@@ -47,6 +47,7 @@ namespace RevitRibbon.API
             app.UseEndpoints(endpoints => endpoints.MapGraphQL());
 
             app.UseGraphQLVoyager();
+
         }
     }
 }
