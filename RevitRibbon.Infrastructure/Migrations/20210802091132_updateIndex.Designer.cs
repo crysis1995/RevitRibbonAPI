@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RevitRibbon.Infrastructure.Data;
@@ -9,9 +10,10 @@ using RevitRibbon.Infrastructure.Data;
 namespace RevitRibbon.Infrastructure.Migrations
 {
     [DbContext(typeof(RevitRibbonContext))]
-    partial class RevitRibbonContextModelSnapshot : ModelSnapshot
+    [Migration("20210802091132_updateIndex")]
+    partial class updateIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

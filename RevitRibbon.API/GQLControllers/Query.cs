@@ -10,7 +10,7 @@ namespace RevitRibbon.API.GQLControllers
     public class Query
     {
         [UseDbContext(typeof(RevitRibbonContext))]
-        [UsePaging(IncludeTotalCount = true)]
+        [UsePaging(IncludeTotalCount = true, MaxPageSize = 1000)]
         [UseFiltering]
         [UseSorting]
         public IQueryable<Parameter> GetParameters([ScopedService] RevitRibbonContext context)
@@ -19,7 +19,7 @@ namespace RevitRibbon.API.GQLControllers
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
-        [UsePaging(IncludeTotalCount = true)]
+        [UsePaging(IncludeTotalCount = true, MaxPageSize = 100)]
         [UseFiltering]
         [UseSorting]
         public IQueryable<Group> GetGroups([ScopedService] RevitRibbonContext context)
@@ -28,7 +28,7 @@ namespace RevitRibbon.API.GQLControllers
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
-        [UsePaging(IncludeTotalCount = true)]
+        [UsePaging(IncludeTotalCount = true, MaxPageSize = 1000)]
         [UseFiltering]
         [UseSorting]
         public IQueryable<SharedParameter> GetSharedParameters([ScopedService] RevitRibbonContext context)
@@ -37,7 +37,7 @@ namespace RevitRibbon.API.GQLControllers
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
-        [UsePaging(IncludeTotalCount = true)]
+        [UsePaging(IncludeTotalCount = true, MaxPageSize = 100)]
         [UseFiltering]
         [UseSorting]
         public IQueryable<Script> GetScripts([ScopedService] RevitRibbonContext context)
@@ -46,7 +46,7 @@ namespace RevitRibbon.API.GQLControllers
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
-        [UsePaging(IncludeTotalCount = true)]
+        [UsePaging(IncludeTotalCount = true, MaxPageSize = 100)]
         [UseFiltering]
         [UseSorting]
         public IQueryable<SharedParameterGroup> GetSharedParameterGroups([ScopedService] RevitRibbonContext context)
