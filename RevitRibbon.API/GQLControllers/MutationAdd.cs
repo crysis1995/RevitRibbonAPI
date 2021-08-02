@@ -6,6 +6,7 @@ using RevitRibbon.Infrastructure.Data;
 using RevitRibbon.Types.Inputs;
 using RevitRibbon.Types.Payloads;
 using System.Threading.Tasks;
+using System;
 
 namespace RevitRibbon.API.GQLControllers
 {
@@ -22,8 +23,15 @@ namespace RevitRibbon.API.GQLControllers
             };
 
             context.Groups.Add(group);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return new GroupPayload(group);
+            try
+            {
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return new GroupPayload(group);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
@@ -44,8 +52,15 @@ namespace RevitRibbon.API.GQLControllers
             };
 
             context.Parameters.Add(parameter);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return new ParameterPayload(parameter);
+            try
+            {
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return new ParameterPayload(parameter);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
@@ -58,8 +73,15 @@ namespace RevitRibbon.API.GQLControllers
             };
 
             context.Scripts.Add(script);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return new ScriptPayload(script);
+            try
+            {
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return new ScriptPayload(script);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
@@ -78,8 +100,15 @@ namespace RevitRibbon.API.GQLControllers
             };
 
             context.SharedParameters.Add(sharedParameter);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return new SharedParameterPayload(sharedParameter);
+            try
+            {
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return new SharedParameterPayload(sharedParameter);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [UseDbContext(typeof(RevitRibbonContext))]
@@ -91,8 +120,15 @@ namespace RevitRibbon.API.GQLControllers
             };
 
             context.SharedParameterGroups.Add(sharedParameterGroup);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            return new SharedParameterGroupPayload(sharedParameterGroup);
+            try
+            {
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                return new SharedParameterGroupPayload(sharedParameterGroup);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

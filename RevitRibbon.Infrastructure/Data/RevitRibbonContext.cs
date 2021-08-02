@@ -39,10 +39,6 @@ namespace RevitRibbon.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Group>()
-                .HasIndex(group => group.Name)
-                .IsUnique();
-
             builder.Entity<Script>()
                 .HasIndex(script => script.Name)
                 .IsUnique();
