@@ -22,6 +22,17 @@ namespace RevitRibbon.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            services.AddCors(options =>
+                {
+                    options.AddPolicy("AllowAnyOrigin",
+                        builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+                });
+
             services.InstallServicesInAssembly(_config);
             services.AddGraphQLServer()
                 .AddQueryType<Query>()
@@ -42,6 +53,7 @@ namespace RevitRibbon.API
             {
                 app.UseDeveloperExceptionPage();
             }
+           app.UseCors("AllowAnyOrigin");
 
             app.UseRouting();
 
